@@ -7,20 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductCategory extends Model
 {
-    protected $fillable = [
-        'name',
-        'description',
-        'category_id',
-        'image',
-    ];
-
-    protected $with = ['category'];
-
-    public function category(){
-        return $this->belongsTo(Category::class);
+    
+    public function getCategoryAttribute($value)
+    {
+        return explode(',', $value);
     }
 
-    public function products(){
-        return $this->hasMany(Product::class);
-    }
+    public function setCategoryAttribute($value)
+    {
+        $this->attributes['categories'] = implode(',', $value);
+    } 
 }

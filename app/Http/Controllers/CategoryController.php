@@ -15,8 +15,46 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::paginate(10));
+        // return CategoryResource::collection(Category::all());
+        // $categories = Category::whereNull('parent_id')->get();
+        // return CategoryResource::collection($categories);
+
+        //Getting all the parents
+        $categoriesParents = Category::with('subcategory.subcategory.subcategory')->withCount('products')->whereNull('parent_id')->get();
+        return CategoryResource::collection($categoriesParents);
     }
+
+
+    public function getSingleCategory(Request $request, $name){
+
+        $categories = Category::where('name', $name )->with('childrenRecursive')->get();
+        return CategoryResource::collection($categories);
+    }
+
+
+    public function getAllCategories(){
+
+        //Returning all Children and grand children of categoriries
+        $categoriesChildren = Category::whereNotNull('parent_id')->get();
+        return CategoryResource::collection($categoriesChildren );
+
+    }
+
+
+    public function categoryFilter(){
+        $categories = Category::withCount(['products' => function($query){
+            $query->withFilters(
+                request()->input('prices', []),
+                request()->input('categories', [])
+            );
+        }])
+        ->get();
+        return CategoryResource::collection($categories);
+    }
+
+    
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -40,6 +78,7 @@ class CategoryController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'image' => "nullable|image:png:jpeg:jpg:gif",
+            'parent_id' => 'nullable|numeric'
         ]);
 
         if($request ->has("image")){

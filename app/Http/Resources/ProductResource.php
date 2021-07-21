@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
             'stock' => $this->stock == 0 ? 'Out of Stock' : $this->stock,
             'discount' => $this->discount,
             'totalPrice' => round((1 - ($this->discount/100)) * $this->price, 2),
+            'categories' => $this->categories,
             'product_images' => ProductImageResource::collection($this->product_images),
             'rating' =>$this->reviews->count() > 0 ? round($this->reviews->sum('star')/ $this->reviews->count()) : 'Rate Now',
             'href' => [

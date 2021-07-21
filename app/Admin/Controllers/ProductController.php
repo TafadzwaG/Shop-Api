@@ -3,7 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductCategory;
+use App\Models\ProductImage;
+use App\Models\Category;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -72,12 +73,15 @@ class ProductController extends AdminController
     {
         $form = new Form(new Product());
 
+
         $form->text('name', __('Name'));
-        $form->select('product_category_id', __('Product category id'))->options(ProductCategory::all()->pluck('name', 'id'));
         $form->textarea('description', __('Description'));
         $form->decimal('price', __('Price'));
         $form->number('stock', __('Stock'));
         $form->number('discount', __('Discount'));
+        $form->multipleSelect('categories','Category')->options(Category::all()->pluck('name','id'));
+      
+ 
 
         return $form;
     }

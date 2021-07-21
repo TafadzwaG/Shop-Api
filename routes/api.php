@@ -22,21 +22,33 @@ Route::post('/user/register', "App\Http\Controllers\Auth\AuthController@register
 Route::post('/user/login', "App\Http\Controllers\Auth\AuthController@login");
 
 Route::resource('products', 'App\Http\Controllers\ProductController');
-Route::get('featured_products', 'App\Http\Controllers\ProductController@getFeaturesProducts');
-Route::resource('banner_ads', 'App\Http\Controllers\BannerAdController');
-Route::resource('home_ads', 'App\Http\Controllers\HomeAdController' );
+Route::get('products_per_page/{per_page}', 'App\Http\Controllers\ProductController@perPage');
 
-Route::resource('categories', 'App\Http\Controllers\CategoryController');
-Route::resource('product_categories', 'App\Http\Controllers\ProductCategoryController');
+
+Route::get('products_filter', 'App\Http\Controllers\ProductController@productFilter');
+Route::get('categories_filter', 'App\Http\Controllers\CategoryController@categoryFilter');
+
+
+Route::get('featured_products', 'App\Http\Controllers\ProductController@getFeaturesProducts');
+Route::get('latest_products', 'App\Http\Controllers\ProductController@getLatestProducts');
+Route::resource('banner_ads', 'App\Http\Controllers\BannerAdController');                                                                                               
+Route::resource('home_ads', 'App\Http\Controllers\HomeAdController' );
+Route::get('product_categories', 'App\Http\Controllers\CategoryController@getAllCategories');
+Route::get('categories_get/{name}', 'App\Http\Controllers\CategoryController@getSingleCategory');
+
+
 
 Route::middleware(["auth:api"])->group(function() {
     Route::get("auth/user", function (){
 		return \Illuminate\Support\Facades\Auth::user();
 	});
+    Route::resource('categories', 'App\Http\Controllers\CategoryController');
+
     Route::resource('blog', 'App\Http\Controllers\BlogController');
     Route::resource('carts', 'App\Http\Controllers\CartController')->except(['create', 'show', 'update']);
     Route::post('/carts/{cart}', 'App\Http\Controllers\CartController@addCartItems');
-    Route::post('/carts/{cart}/checkout', 'App\Http\Controllers\CartController@checkout');
+    Route::post('/remove_cart_item/{cart}', 'App\Http\Controllers\CartController@removeCartItem');
+    // Route::post('/carts/{cart}/checkout', 'App\Http\Controllers\CartController@checkout');
     Route::resource('cart_items', 'App\Http\Controllers\CartItemController')->except(["index", "show", "create"]);
 
     Route::resource('wishlists', 'App\Http\Controllers\WishlistController')->except(['create', 'show', 'update']);

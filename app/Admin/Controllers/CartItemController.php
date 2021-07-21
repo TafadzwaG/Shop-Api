@@ -2,20 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Category;
+use App\Models\CartItem;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class CategoryController extends AdminController
+class CartItemController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Category';
+    protected $title = 'CartItem';
 
     /**
      * Make a grid builder.
@@ -24,12 +24,12 @@ class CategoryController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Category());
+        $grid = new Grid(new CartItem());
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('description', __('Description'));
-        $grid->column('image', __('Image'));
+        $grid->column('product_id', __('Product id'));
+        $grid->column('cart_id', __('Cart id'));
+        $grid->column('quantity', __('Quantity'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -44,12 +44,12 @@ class CategoryController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Category::findOrFail($id));
+        $show = new Show(CartItem::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('description', __('Description'));
-        $show->field('image', __('Image'));
+        $show->field('product_id', __('Product id'));
+        $show->field('cart_id', __('Cart id'));
+        $show->field('quantity', __('Quantity'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -63,12 +63,11 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Category());
+        $form = new Form(new CartItem());
 
-        $form->text('name', __('Name'));
-        $form->textarea('description', __('Description'));
-        $form->select('parent_id', __('Category id'))->options(Category::all()->pluck('name', 'id'))->default(null);
-        $form->image('image', __('Image'))->move('public/images');
+        $form->number('product_id', __('Product id'));
+        $form->number('cart_id', __('Cart id'));
+        $form->number('quantity', __('Quantity'));
 
         return $form;
     }

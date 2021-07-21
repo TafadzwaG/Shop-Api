@@ -14,11 +14,6 @@ class ProductCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'name' => $this->name,
-            'description' => $this->description,
-            'image' => preg_replace('/^public/', '', $this->image ),
-            'products' => ProductResource::collection($this->products),
-        ];
+       
     }
 }

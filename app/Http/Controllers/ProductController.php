@@ -13,7 +13,7 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except('index', 'show', 'getFeaturesProducts');
+        $this->middleware('auth:api')->except('index', 'show', 'getFeaturesProducts', 'getLatestProducts', 'getPerPage');
     }
 
     /**
@@ -23,19 +23,55 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // return ProductResource::collection(Product::paginate(10));
-        return  ProductCollection::collection(Product::paginate(10));
+        
+        return  ProductCollection::collection(Product::all());
+
+        
     }
+
+    public function perPage(Request $request, $per_page){
+
+        if($per_page > 20){
+            return  ProductCollection::collection(Product::all());
+        }
+        return  ProductCollection::collection(Product::paginate($per_page));
+    }
+
+    
 
     public function getFeaturesProducts(){
 
         return  ProductResource::collection(Product::inRandomOrder()->limit(4)->get());
     }
+
+    public function getLatestProducts(){
+        return  ProductResource::collection(Product::latest()->limit(3)->get());
+    }
+
+
+
+    public function productFilter(){
+        $products = Product::withFilters(
+            request()->input('prices', []),
+            request()->input('categories', []),
+        )->get();
+
+        return ProductResource::collection($products);
+    }
+
+
+
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         //
@@ -76,7 +112,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        return new  ProductCollection($product);
     }
 
     /**

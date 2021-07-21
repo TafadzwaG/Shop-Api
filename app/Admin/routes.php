@@ -23,5 +23,9 @@ Route::group([
     $router->resource('blog-images', BlogImageController::class);
     $router->resource('contacts', ContactController::class);
     $router->resource('product-categories', ProductCategoryController::class);
+    $router->resource('carts', CartController::class);
+    $router->resource('cart-items', CartItemController::class);
+    $router->resource('wishlists', WishlistController::class);
+
     
 });

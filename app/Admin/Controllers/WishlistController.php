@@ -2,20 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Category;
+use App\Models\Wishlist;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class CategoryController extends AdminController
+class WishlistController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Category';
+    protected $title = 'Wishlist';
 
     /**
      * Make a grid builder.
@@ -24,12 +24,10 @@ class CategoryController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Category());
+        $grid = new Grid(new Wishlist());
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('description', __('Description'));
-        $grid->column('image', __('Image'));
+        $grid->column('user_id', __('User id'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -44,12 +42,10 @@ class CategoryController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Category::findOrFail($id));
+        $show = new Show(Wishlist::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('description', __('Description'));
-        $show->field('image', __('Image'));
+        $show->field('user_id', __('User id'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -63,12 +59,9 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Category());
+        $form = new Form(new Wishlist());
 
-        $form->text('name', __('Name'));
-        $form->textarea('description', __('Description'));
-        $form->select('parent_id', __('Category id'))->options(Category::all()->pluck('name', 'id'))->default(null);
-        $form->image('image', __('Image'))->move('public/images');
+        $form->number('user_id', __('User id'));
 
         return $form;
     }

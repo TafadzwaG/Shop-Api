@@ -10,13 +10,26 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
-        'image'
+        'image',
+        'parent_id'
     ];
 
 
-    public function product_categories(){
-        return $this->hasMany(ProductCategory::class);
+    
+
+    public function products(){
+        return $this->belongsToMany(Product::class, 'product_categories');
     }
 
-    
+    public function subcategory(){
+        return $this->hasMany(Category::class, 'parent_id')->withCount('products');
+    }
+
+    public function parent(){
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function childrenRecursive(){
+        return $this->subcategory()->with('childrenRecursive');
+    }
 }

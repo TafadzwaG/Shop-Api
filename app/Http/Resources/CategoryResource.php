@@ -19,7 +19,9 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'image' => preg_replace('/^public/', '', $this->image ),
-            'product_categories' =>ProductCategoryResource::collection($this->product_categories)
+            'products' =>ProductResource::collection($this->products),
+            'products_count' => $this->products_count,
+            'subcategory' => ($this->subcategory)
         ];
     }
 }
