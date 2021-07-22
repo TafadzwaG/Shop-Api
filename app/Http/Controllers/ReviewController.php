@@ -18,8 +18,7 @@ class ReviewController extends Controller
     {
 
         
-            return ReviewResource::collection(Review::paginate(5));
-            // return ReviewResource::collection($product->reviews);
+            return ReviewResource::collection(Review::latest()->limit(3)->get());
             
 
             
@@ -46,9 +45,11 @@ class ReviewController extends Controller
     {
         $data_reviews = $request->validate([
             'product_id' => 'required  | numeric',
-            "customer" => "required| string",
+            "name" => "required| string",
+            "star" => "required| numeric",
+            "review_title" => "required | string",
+            "email" => "required| email",
             "review" => "required|string",
-            "star" => "required| numeric"
         ]);
 
         $review = Review::create($data_reviews);

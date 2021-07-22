@@ -43,7 +43,7 @@ Route::middleware(["auth:api"])->group(function() {
 		return \Illuminate\Support\Facades\Auth::user();
 	});
     Route::resource('categories', 'App\Http\Controllers\CategoryController');
-
+    Route::resource('reviews', 'App\Http\Controllers\ReviewController');
     Route::resource('blog', 'App\Http\Controllers\BlogController');
     Route::resource('carts', 'App\Http\Controllers\CartController')->except(['create', 'show', 'update']);
     Route::post('/carts/{cart}', 'App\Http\Controllers\CartController@addCartItems');

@@ -22,6 +22,7 @@ class ProductCollection extends JsonResource
             'totalPrice' => round((1 - ($this->discount/100)) * $this->price, 2),
             'rating' =>$this->reviews->count() > 0 ? round($this->reviews->sum('star')/ $this->reviews->count()) : 'Rate Now',
             'discount' => $this->discount,
+            'reviews' => ReviewResource::collection($this->reviews),
             'product_images' => ProductImageResource::collection($this->product_images),
             'categories' => $this->categories,
             'href' => [
